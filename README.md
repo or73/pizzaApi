@@ -56,12 +56,22 @@ API for a Pizza-Delivery Company
 
 # Menus-Methods 
 ## menu-POST
-**(Request that the resource at the URI do something with the provided entity)**       
+**(Request that the resource at the URI do something with the provided entity)**   
+### General Information
+    Required data: payload → name and price
+    Optional data: None
+    Procedure description:   1. Validate name and price
+                             2. Validate menu exists
+                             3. Generate item id, randomly
+                             4. Create item object
+                             5. Add item object to menu1. Validate token exists
+
+### Path and Required Data      
       
-| Path   | Parameters            | Headers | e.g.                       |
-| ---    | ---                   | ---     | ---                        |
-| /menus | name **`(required)`** | None    | http://localhos:3000/menus |
-|        | price**`(required)`** |         |                            |
+| Path   | Parameters             | Headers | e.g.                       |
+| ---    | ---                    | ---     | ---                        |
+| /menus | name **`(required)`**  | None    | http://localhos:3000/menus |
+|        | price **`(required)`** |         |                            |
    
    
 ### menu-post-Response   
@@ -91,7 +101,18 @@ Stores information of required token
       
 ## menu-GET
 **(Retrieve information)**
-If the item exists, then returns all information associated with item, except the id.  Otherwise, returns an error message.
+### General Information
+    Required data: queryStringObject → name and price
+    Optional data: None
+    Procedure description:   1. Validates operation, one item of menu or a list of items in menu
+                             2. Validate item exists
+                             3. Retrieve item information or items list
+
+> If the item exists, then returns all information associated with item, except the id.  Otherwise, returns an error message.
+> If path includes 'all' then a list of all fetched menus   
+
+### Path and Required Data      
+
 
 | Path             | Parameters            | Headers | e.g.                                      |
 | ---              | ---                   | ---     | ---                                       |
@@ -147,8 +168,20 @@ If the item exists, then returns all information associated with item, except th
 ---   
 
 ## menu-PUT
-**(Store an entity at a URI)**
-Updates 'name' and 'price' fields of an item.  A valid id must be send or an error message will be return.
+**(Store an entity at a URI)**   
+### General Information
+    Required data: queryStringObject → name and price
+    Optional data: None
+    Procedure description:   1. Validates itemName, price, and token
+                             2. Validates token
+                             3. Validates menu exists
+                             4. Generate new menu object, with all new values, and previous values, if not updated
+                             5. Update the menu data, with the new object
+
+> Updates 'name' and 'price' fields of an item.  A valid id must be send or an error message will be return.
+
+### Path and Required Data 
+
 
 | Path             | Parameters             |  Headers                 | e.g.                                  |
 | ---              | ---                    | ---                      | ---                                   |
@@ -184,7 +217,16 @@ Updates 'name' and 'price' fields of an item.  A valid id must be send or an err
 
 ## menu-DELETE
 **(Request that a resource be removed)**   
-Remove the item provided, and update all menus and user's cartItems which contains provided item and remove it.
+### General Information
+    Required data: headers → email, token
+                   queryStringObject → name
+    Optional data: None
+    Procedure description:   1. Validate email, and token
+                             2. Validates token
+                             3. Delete menu
+> Remove the item provided, and update all menus and user's cartItems which contains provided item and remove it.
+
+### Path and Required Data 
 
 | Path             | Parameters |  Headers               | e.g.                                  |
 | ---              | ---        | ---                    | ---                                   |
@@ -212,9 +254,95 @@ Remove the item provided, and update all menus and user's cartItems which contai
 
 ---  
 
+# Orders-Methods 
+## order-POST
+**(Request that the resource at the URI do something with the provided entity)**   
+Will create an order with the items on cart    
+      
+| Path    | Parameters | Headers                    | e.g.                        |
+| ---     | ---        | ---                        | ---                         |
+| /orders | None       | tokenId **`(required)`** | http://localhos:3000/orders |
+   
+   
+### order-post-Response   
+
+```javascript
+{
+    statusCode: 200,
+    message: 'Order created',
+    data: {
+       id,
+       items,
+       iat,
+       price,
+       paymentProcessed
+    }
+}
+```
+
+### order-post-Errors    
+   
+| Error | Parameters                                   |
+| ---   | ---                                          |
+| 400   | Required fields missing or they were invalid |
+| 400   | Payment not processed                        |
+| 400   | No items on cart to place an order           |
+| 400   | Order already exists                         |
+| 500   | Insufficient permissions                     |
+
+---  
+      
+## order-GET
+**(Retrieve information)**
+If the cart exists, then returns all information associated with cart.  Otherwise, returns an error message.
+
+| Path    | Parameters          | Headers                  | e.g.                                    |
+| ---     | ---                 | ---                      | ---                                     |
+| /orders | id **`(required)`** | tokenId **`(required)`** | http://localhost:3000/orders/id=orderId |
+   
+   
+### order-get-Response   
+
+```javascript
+{
+    statusCode: 200,
+    message: 'Order fetched correctly',
+    data: {
+       id,
+       items,
+       iat,
+       price,
+       paymentProcessed
+    }
+}
+```   
+
+### order-get-Errors    
+      
+| Error | Parameters                                   |
+| ---   | ---                                          |
+| 400   | Required fields missing or they were invalid |
+| 403   | Unauthorized access                          |
+| 404   | Order not found                              |
+| 500   | Insufficient permissions                     |
+
+---   
+
 # ShoppingCart-Methods 
 ## shoppingCart-POST
-**(Request that the resource at the URI do something with the provided entity)**       
+**(Request that the resource at the URI do something with the provided entity)**   
+### General Information
+    Required data: payload → email, token
+                   queryStringObject → item, qtty
+    Optional data: None
+    Procedure description: 1. Validate email, token, item, qtty
+                           2. Validate token
+                                 If item && qtty                         If !item && !qtty
+                           3. Validate if item exists in menu        3. Validate Shopping Cart  exists
+                           4. Create new item object                 4. Create new Shopping Cart object
+                           5. Add new item object to Shopping Cart   5. Create new Shopping Cart
+
+### Path and Required Data      
       
 | Path                                                 | Parameters            | Headers                | e.g.                               |
 | ---                                                  | ---                   | ---                    | ---                                |
@@ -270,7 +398,20 @@ Stores information of required token
       
 ## shoppingCart-GET
 **(Retrieve information)**
-If the item exists, then returns all information associated with item, except the id.  Otherwise, returns an error message.
+### General Information
+    Required data: payload → email, token
+                   queryStringObject → all
+    Optional data: None
+    Procedure description: 1. Validate email, token, item, qtty
+                           2. Validate token
+                                 If all                                    If !all
+                           3. Validate if Shopping Cart exists       3. Validate Shopping Cart  exists
+                           4. Fetch list of Shopping Carts           4. Fetch Shopping Cart
+
+> If the item exists, then returns all information associated with item, except the id.  Otherwise, returns an error message.
+
+### Path and Required Data  
+
 
 | Path                     | Parameters            | Headers | e.g.                                              |
 | ---                      | ---                   | ---     | ---                                               |
@@ -329,7 +470,19 @@ If the item exists, then returns all information associated with item, except th
 
 ## shoppingCart-PUT
 **(Store an entity at a URI)**
-Updates 'name' and 'price' fields of an item.  A valid id must be send or an error message will be return.
+### General Information
+    Required data: headers → email, token
+                   payload → items
+                   queryStringObject → id
+    Optional data: None
+    Procedure description:   1. Validate email, token, shoppingCartId, items
+                             2. Validate token
+                             3. Validate if ShoppingCartId exists
+                             4. Update each item in Shopping Cart
+
+> Updates 'name' and 'price' fields of an item.  A valid id must be send or an error message will be return.
+
+### Path and Required Data  
 
 | Path                     | Parameters                 |  Headers                 | e.g.                                          |
 | ---                      | ---                        | ---                      | ---                                           |
@@ -383,7 +536,20 @@ Updates 'name' and 'price' fields of an item.  A valid id must be send or an err
 
 ## shoppingCart-DELETE
 **(Request that a resource be removed)**   
-Remove the item provided, and update all menus and user's cartItems which contains provided item and remove it.
+### General Information
+    Required data: headers → email, token
+                   payload → items
+                   queryStringObject → id
+    Optional data: None
+    Procedure description:   1. Validate email, token, shoppingCartId, items
+                             2. Validate token
+                             3. Validate shoppingCartId exists
+                                If shoppingCardId && !items   If shoppingCartId && items
+                             4. Delete shoppingCart           4. Delete items qtty, from shopping Cart
+
+> Remove the item provided, and update all menus and user's cartItems which contains provided item and remove it.
+
+### Path and Required Data 
 
 | Path                     | Parameters           |  Headers               | e.g.                                          |
 | ---                      | ---                  | ---                    | ---                                           |
@@ -425,86 +591,19 @@ Remove the item provided, and update all menus and user's cartItems which contai
 | 412   | Invalid argument.  Missing or invalid required fields                |
 | 428   | Timer expired.   Token expired                                       |
 
---- 
-
-# Orders-Methods 
-## order-POST
-**(Request that the resource at the URI do something with the provided entity)**   
-Will create an order with the items on cart    
-      
-| Path    | Parameters | Headers                    | e.g.                        |
-| ---     | ---        | ---                        | ---                         |
-| /orders | None       | tokenId **`(required)`** | http://localhos:3000/orders |
-   
-   
-### order-post-Response   
-
-```javascript
-{
-    statusCode: 200,
-    message: 'Order created',
-    data: {
-       id,
-       items,
-       iat,
-       price,
-       paymentProcessed
-    }
-}
-```
-
-### order-post-Errors    
-   
-| Error | Parameters                                   |
-| ---   | ---                                          |
-| 400   | Required fields missing or they were invalid |
-| 400   | Payment not processed                        |
-| 400   | No items on cart to place an order           |
-| 400   | Order already exists                         |
-| 500   | Insufficient permissions                     |
-
----  
-      
-## order-GET
-**(Retrieve information)**
-If the cart exists, then returns all information associated with cart.  Otherwise, returns an error message.
-
-| Path    | Parameters            | Headers                    | e.g.                                    |
-| ---     | ---                   | ---                        | ---                                     |
-| /orders | id **`(required)`** | tokenId **`(required)`** | http://localhost:3000/orders/id=orderId |
-   
-   
-### order-get-Response   
-
-```javascript
-{
-    statusCode: 200,
-    message: 'Order fetched correctly',
-    data: {
-       id,
-       items,
-       iat,
-       price,
-       paymentProcessed
-    }
-}
-```   
-
-### order-get-Errors    
-      
-| Error | Parameters                                   |
-| ---   | ---                                          |
-| 400   | Required fields missing or they were invalid |
-| 403   | Unauthorized access                          |
-| 404   | Order not found                              |
-| 500   | Insufficient permissions                     |
-
----   
+---
 
 # Tokens-Methods  
 ## token-POST   
-**(Request that the resource at the URI do something with the provided entity)**       
-      
+**(Request that the resource at the URI do something with the provided entity)**  
+### General Information
+    Required data: Payload → email, password
+    Optional data: None
+    Procedure description:   1. Validate user exists
+                             2. Create token object
+                             3. Stores token object 
+
+### Path and Required Data     
 | Path    | Parameters              | Headers | e.g.                         |
 | ---     | ---                     | ---     | ---                          |
 | /tokens | email **`required`**    | None    | http://localhost:3000/tokens |
@@ -540,6 +639,17 @@ Stores information of required token
       
 ## token-GET   
 **(Retrieve information)**   
+### General Information
+    Required data: queryStringObject → token
+    Optional data: None
+    Procedure description:   1. Validate token exists
+                             2. Retrieves token information or token list
+
+    Two operations are available:
+      1. Get information of one token
+      2. Get a list of all existing tokens
+
+### Path and Required Data 
 If the token exists, then returns all information associated with token, except the id.  Otherwise, returns an error message.   
    
 | Path              | Parameters               |  Headers | e.g.                                    |
@@ -596,6 +706,14 @@ If the token exists, then returns all information associated with token, except 
    
 ## token-PUT
 **(Store an entity at a URI)**   
+### General Information
+    Required data: QueryStringObject → token
+    Optional data: None
+    Procedure description:   1. Validate token exists
+                             2. Reset token timer
+                             3. Update token data
+
+### Path and Required Data 
 Updates 'expires' field of a token, resets it and assigns it a new life time.  A valid token must be send or an error message will be return.   
    
 | Path              | Parameters |  Headers | e.g.                                    |
@@ -630,7 +748,14 @@ Updates 'expires' field of a token, resets it and assigns it a new life time.  A
 ---      
    
 ## token-DELETE   
-**(Request that a resource be removed)**     
+**(Request that a resource be removed)**   
+### General Information
+    Required data: QueryStringObject → token
+    Optional data: None
+    Procedure description:   1. Validate token exists
+                             2. Delete token 
+
+### Path and Required Data   
    
 | Path              | Parameters |  Headers | e.g.                                    |
 | ---               | ---        | ---      | ---                                     |
@@ -661,10 +786,22 @@ Updates 'expires' field of a token, resets it and assigns it a new life time.  A
 # Users-Methods  
 
 ## user-POST   
+**(Request that the resource at the URI do something with the provided entity)**      
+### General Information
+    Required data: Payload → email, address, password, name
+    Optional data: None
+    Procedure description:   1. Validates email, password, address, and name
+                             2. Validates user exist
+                             2. Creates User Object                             
+                             3. Generates tokenId and token timer
+                             4. Creates user and token object
+    
+    All data is required to create the user.
+    Two more fields are filled automatically:
+       shoppingCartId: false → is a boolean, is true if the user has a shoppingCart  
+       ordersBckp: [ ]       → will contain all the purchase orders made by the user 
 
-**(Request that the resource at the URI do something with the provided entity)**       
-
-      
+### Path and Required Data
 | Path   | Parameters                | Headers | e.g.                        |
 | ---    | ---                       | ---     | ---                         |
 | /users | email **`(required)`**    | None    | http://localhost:3000/users |
@@ -687,7 +824,6 @@ Stores information of required user
     }
 }
 ```
-
    
 ### user-post-Errors    
    
@@ -704,8 +840,22 @@ Stores information of required user
       
 ## user-GET   
 **(Retrieve information)**   
-If the mail exists, then returns all information associated with user, except the password.  Otherwise, returns an error message.   
-   
+### General Information
+    Required data: queryStringObject → email
+                   headers → token
+    Optional data: None
+    Procedure description:  1. Token validation
+                            2. Validate if user exists
+                            3. Retrieves the information
+    
+    Two operations are available:
+     1. Get information of one user   → retrieves information of provided mail's user
+     2. Get a list of existing users  → retrieves a list of users
+    
+    Both operation requires a user and token validation.
+> If the mail exists, then returns all information associated with user, except the password.  Otherwise, returns an error message.   
+
+### Path and Required Data  
 | Path                           | Parameters             |  Headers                 | e.g.                                                |
 | ---                            | ---                    | ---                      | ---                                                 |
 | /users?mail=some@validmail.com | email **`required`**   | tokenId **`(required)`** | http://localhost:3000/users?mail=some@validmail.com |
@@ -765,9 +915,19 @@ If the mail exists, then returns all information associated with user, except th
    
 ---      
    
-## user-PUT  
+## user-PUT   
 **(Store an entity at a URI)**   
-Updates all or some fields of a user.  A valid token must be send or an error message will be return.   
+### General Information   
+    Required data: payload → address, password, name 
+	               queryStringObject → email 
+                   headers → token
+    Optional data: None
+    Procedure description:  1. Validate token
+                            2. Validate if user exists in database/file
+                            3. Update user data   
+> Updates all or some fields of a user.  A valid token must be send or an error message will be return.   
+
+### Path and Required Data
    
 | Path                            | Parameters |  Headers                 | e.g.                                                  |
 | ---                             | ---        | ---                      | ---                                                   |
@@ -813,6 +973,15 @@ Updates all or some fields of a user.  A valid token must be send or an error me
    
 ## user-DELETE   
 **(Request that a resource be removed)**   
+### General Information
+    Required data: payload → email
+                   headers → token
+    Optional data: None
+    Procedure description:  1. Validate token
+                            2. Validate if user exists in database/file
+                            3. Delete: token, shopping cart (if exists in user), user
+
+### Path and Required Data
    
 | Path                            | Parameters |  Headers                 | e.g.                                                  |
 | ---                             | ---        | ---                      | ---                                                   |
@@ -839,6 +1008,6 @@ Updates all or some fields of a user.  A valid token must be send or an error me
 | 405   | Operation not permitted. Token associated with email has not been deleted |
 | 405   | Operation not permitted. User associated with email does not exist        |
 | 412   | Invalid argument.  Missing or invalid required fields                     |
-| 428   | Timer expired.   Token expired                                                          |
+| 428   | Timer expired.   Token expired                                            |
 
 ---   
