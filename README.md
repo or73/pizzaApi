@@ -6,18 +6,20 @@ API for a Pizza-Delivery Company
 
 1. [Server Ports](#server-ports)
 
-2. [Folders Structure](#folders-structure)
+2. [Folders Structure](#folders-structure)  
 
-3. **[Controllers and Objects](#controllers-and-objects-structures)** ⇒ | [<code>User</code>](#user) | [<code>Menu</code>](#item) | [<code>Order</code>](#order) | [<code>Shopping Cart</code>](#shoppingCart) |	
-4. **[Menu's Methods](#menus-methods)** ⇒ | [<code>POST</code>](#menu-post) | [<code>GET</code>](#menu-get) | [<code>PUT</code>](#menu-put) | [<code>DELETE</code>](#menu-delete) |
+3. [Database/Files Structure and Relationships](#database-files-structure-and-relationships)
 
-5. **[Order's Methods](#orders-methods)** ⇒ | [<code>POST</code>](#order-post) | [<code>GET</code>](#order-get) |
+4. **[Controllers and Objects](#controllers-and-objects-structures)** ⇒  [<code>Menu</code>](#item) | [<code>Order</code>](#order) | [<code>Shopping Cart</code>](#shopping-cart) | <code>Token</code>(#token) | [<code>User</code>](#user) |	
+5. **[Menu's Methods](#menus-methods)** ⇒ | [<code>POST</code>](#menu-post) | [<code>GET</code>](#menu-get) | [<code>PUT</code>](#menu-put) | [<code>DELETE</code>](#menu-delete) |
 
-6. **[ShoppingCart's Methods](#shoppingcart-methods)** ⇒ | [<code>POST</code>](#shoppingcart-post) | [<code>GET</code>](#shoppingcart-get) | [<code>PUT</code>](#shoppingcart-put) | [<code>DELETE</code>](#shoppingcart-delete) |
+6. **[Order's Methods](#orders-methods)** ⇒ | [<code>POST</code>](#order-post) | [<code>GET</code>](#order-get) |
 
-7. **[Token's Methods](#tokens-methods)** ⇒ | [<code>POST</code>](#token-post)   [<code>GET</code>](#token-get) | [<code>PUT</code>](#token-put) | [<code>DELETE</code>](#token-delete) |
+7. **[ShoppingCart's Methods](#shoppingcart-methods)** ⇒ | [<code>POST</code>](#shoppingcart-post) | [<code>GET</code>](#shoppingcart-get) | [<code>PUT</code>](#shoppingcart-put) | [<code>DELETE</code>](#shoppingcart-delete) |
 
-8. **[User's Methods](#users-methods)** ⇒ | [<code>POST</code>](#user-post) | [<code>GET</code>](#user-get) | [<code>PUT</code>](#user-put) | [<code>DELETE</code>](#user-delete) |
+8. **[Token's Methods](#tokens-methods)** ⇒ | [<code>POST</code>](#token-post)   [<code>GET</code>](#token-get) | [<code>PUT</code>](#token-put) | [<code>DELETE</code>](#token-delete) |
+
+9. **[User's Methods](#users-methods)** ⇒ | [<code>POST</code>](#user-post) | [<code>GET</code>](#user-get) | [<code>PUT</code>](#user-put) | [<code>DELETE</code>](#user-delete) |
 
 ---
 
@@ -47,7 +49,7 @@ API for a Pizza-Delivery Company
 * [app.js](https://github.com/or73/apipizzacompany/blob/master/app.js)
 
 ---   
-# Database / Files Structure and Relations
+# Database-Files-Structure-and-Relationships
 ![Structure and Relations](https://github.com/or73/pizzaApi/blob/master/apiPizzaDeliveryDBStructure_md.png)
 
 ---
@@ -108,6 +110,21 @@ API for a Pizza-Delivery Company
 | price            | number  |
 | paymentProcessed | boolean |
 
+## Token   
+
+```javascript
+{
+	email: "valid@usermail.com",
+	tokenId: xxxxxxxxxxx,
+	expires: 123456
+}
+```   
+| Field   | Type   |
+|---      | ---    |
+| email   | string |
+| tokenId | string |
+| expires | number |
+
 ## User  
 
 ```javascript
@@ -124,21 +141,6 @@ API for a Pizza-Delivery Company
 | email    | string |
 | address  | string |
 | password | string |
-
-## Token   
-
-```javascript
-{
-	email: "valid@usermail.com",
-	tokenId: xxxxxxxxxxx,
-	expires: 123456
-}
-```   
-| Field   | Type   |
-|---      | ---    |
-| email   | string |
-| tokenId | string |
-| expires | number |
 
 ---
 
