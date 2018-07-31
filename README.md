@@ -10,7 +10,7 @@ API for a Pizza-Delivery Company
 
 3. [Database/Files Structure and Relationships](#database-files-structure-and-relationships)
 
-4. **[Controllers and Objects](#controllers-and-objects-structures)** ⇒  [<code>Menu</code>](#item) | [<code>Order</code>](#order) | [<code>Shopping Cart</code>](#shopping-cart) | <code>Token</code>(#token) | [<code>User</code>](#user) |	
+4. **[Controllers and Objects](#controllers-and-objects-structures)** ⇒ | [<code>Menu</code>](#menu) | [<code>Order</code>](#order) | [<code>Shopping Cart</code>](#shopping-cart) | [<code>Token</code>](#token) | [<code>User</code>](#user) |	
 5. **[Menu's Methods](#menus-methods)** ⇒ | [<code>POST</code>](#menu-post) | [<code>GET</code>](#menu-get) | [<code>PUT</code>](#menu-put) | [<code>DELETE</code>](#menu-delete) |
 
 6. **[Order's Methods](#orders-methods)** ⇒ | [<code>POST</code>](#order-post) | [<code>GET</code>](#order-get) |
